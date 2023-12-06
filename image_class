@@ -1,0 +1,455 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyMu1J5lHGY3f1KD+X/r3Hgi",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/ZJay07/Git-Practice/blob/main/image_class\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Testing to create a MLP using Ivy"
+      ],
+      "metadata": {
+        "id": "-ZYxHTAXHbmQ"
+      }
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 1,
+      "metadata": {
+        "id": "iDUSZlXpDo1t",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "bb76ec01-146f-48b4-af25-c9f949231200"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Collecting ivy\n",
+            "  Downloading ivy-0.0.4.0-py3-none-any.whl (14.1 MB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m14.1/14.1 MB\u001b[0m \u001b[31m55.8 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hRequirement already satisfied: numpy in /usr/local/lib/python3.10/dist-packages (from ivy) (1.23.5)\n",
+            "Collecting einops (from ivy)\n",
+            "  Downloading einops-0.7.0-py3-none-any.whl (44 kB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m44.6/44.6 kB\u001b[0m \u001b[31m3.9 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hRequirement already satisfied: psutil in /usr/local/lib/python3.10/dist-packages (from ivy) (5.9.5)\n",
+            "Requirement already satisfied: termcolor in /usr/local/lib/python3.10/dist-packages (from ivy) (2.3.0)\n",
+            "Collecting colorama (from ivy)\n",
+            "  Downloading colorama-0.4.6-py2.py3-none-any.whl (25 kB)\n",
+            "Requirement already satisfied: packaging in /usr/local/lib/python3.10/dist-packages (from ivy) (23.2)\n",
+            "Collecting nvidia-ml-py (from ivy)\n",
+            "  Downloading nvidia_ml_py-12.535.133-py3-none-any.whl (37 kB)\n",
+            "Requirement already satisfied: diskcache in /usr/local/lib/python3.10/dist-packages (from ivy) (5.6.3)\n",
+            "Requirement already satisfied: google-auth in /usr/local/lib/python3.10/dist-packages (from ivy) (2.17.3)\n",
+            "Collecting urllib3<2.0 (from ivy)\n",
+            "  Downloading urllib3-1.26.18-py2.py3-none-any.whl (143 kB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m143.8/143.8 kB\u001b[0m \u001b[31m15.3 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hRequirement already satisfied: requests in /usr/local/lib/python3.10/dist-packages (from ivy) (2.31.0)\n",
+            "Collecting pyvis (from ivy)\n",
+            "  Downloading pyvis-0.3.2-py3-none-any.whl (756 kB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m756.0/756.0 kB\u001b[0m \u001b[31m44.7 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hCollecting dill (from ivy)\n",
+            "  Downloading dill-0.3.7-py3-none-any.whl (115 kB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m115.3/115.3 kB\u001b[0m \u001b[31m12.9 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hRequirement already satisfied: astunparse in /usr/local/lib/python3.10/dist-packages (from ivy) (1.6.3)\n",
+            "Requirement already satisfied: ml-dtypes in /usr/local/lib/python3.10/dist-packages (from ivy) (0.2.0)\n",
+            "Requirement already satisfied: cloudpickle in /usr/local/lib/python3.10/dist-packages (from ivy) (2.2.1)\n",
+            "Requirement already satisfied: gast in /usr/local/lib/python3.10/dist-packages (from ivy) (0.5.4)\n",
+            "Requirement already satisfied: tqdm in /usr/local/lib/python3.10/dist-packages (from ivy) (4.66.1)\n",
+            "Requirement already satisfied: wheel<1.0,>=0.23.0 in /usr/local/lib/python3.10/dist-packages (from astunparse->ivy) (0.42.0)\n",
+            "Requirement already satisfied: six<2.0,>=1.6.1 in /usr/local/lib/python3.10/dist-packages (from astunparse->ivy) (1.16.0)\n",
+            "Requirement already satisfied: cachetools<6.0,>=2.0.0 in /usr/local/lib/python3.10/dist-packages (from google-auth->ivy) (5.3.2)\n",
+            "Requirement already satisfied: pyasn1-modules>=0.2.1 in /usr/local/lib/python3.10/dist-packages (from google-auth->ivy) (0.3.0)\n",
+            "Requirement already satisfied: rsa<5,>=3.1.4 in /usr/local/lib/python3.10/dist-packages (from google-auth->ivy) (4.9)\n",
+            "Requirement already satisfied: ipython>=5.3.0 in /usr/local/lib/python3.10/dist-packages (from pyvis->ivy) (7.34.0)\n",
+            "Requirement already satisfied: jinja2>=2.9.6 in /usr/local/lib/python3.10/dist-packages (from pyvis->ivy) (3.1.2)\n",
+            "Requirement already satisfied: jsonpickle>=1.4.1 in /usr/local/lib/python3.10/dist-packages (from pyvis->ivy) (3.0.2)\n",
+            "Requirement already satisfied: networkx>=1.11 in /usr/local/lib/python3.10/dist-packages (from pyvis->ivy) (3.2.1)\n",
+            "Requirement already satisfied: charset-normalizer<4,>=2 in /usr/local/lib/python3.10/dist-packages (from requests->ivy) (3.3.2)\n",
+            "Requirement already satisfied: idna<4,>=2.5 in /usr/local/lib/python3.10/dist-packages (from requests->ivy) (3.6)\n",
+            "Requirement already satisfied: certifi>=2017.4.17 in /usr/local/lib/python3.10/dist-packages (from requests->ivy) (2023.11.17)\n",
+            "Requirement already satisfied: setuptools>=18.5 in /usr/local/lib/python3.10/dist-packages (from ipython>=5.3.0->pyvis->ivy) (67.7.2)\n",
+            "Collecting jedi>=0.16 (from ipython>=5.3.0->pyvis->ivy)\n",
+            "  Downloading jedi-0.19.1-py2.py3-none-any.whl (1.6 MB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m1.6/1.6 MB\u001b[0m \u001b[31m62.2 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hRequirement already satisfied: decorator in /usr/local/lib/python3.10/dist-packages (from ipython>=5.3.0->pyvis->ivy) (4.4.2)\n",
+            "Requirement already satisfied: pickleshare in /usr/local/lib/python3.10/dist-packages (from ipython>=5.3.0->pyvis->ivy) (0.7.5)\n",
+            "Requirement already satisfied: traitlets>=4.2 in /usr/local/lib/python3.10/dist-packages (from ipython>=5.3.0->pyvis->ivy) (5.7.1)\n",
+            "Requirement already satisfied: prompt-toolkit!=3.0.0,!=3.0.1,<3.1.0,>=2.0.0 in /usr/local/lib/python3.10/dist-packages (from ipython>=5.3.0->pyvis->ivy) (3.0.41)\n",
+            "Requirement already satisfied: pygments in /usr/local/lib/python3.10/dist-packages (from ipython>=5.3.0->pyvis->ivy) (2.16.1)\n",
+            "Requirement already satisfied: backcall in /usr/local/lib/python3.10/dist-packages (from ipython>=5.3.0->pyvis->ivy) (0.2.0)\n",
+            "Requirement already satisfied: matplotlib-inline in /usr/local/lib/python3.10/dist-packages (from ipython>=5.3.0->pyvis->ivy) (0.1.6)\n",
+            "Requirement already satisfied: pexpect>4.3 in /usr/local/lib/python3.10/dist-packages (from ipython>=5.3.0->pyvis->ivy) (4.9.0)\n",
+            "Requirement already satisfied: MarkupSafe>=2.0 in /usr/local/lib/python3.10/dist-packages (from jinja2>=2.9.6->pyvis->ivy) (2.1.3)\n",
+            "Requirement already satisfied: pyasn1<0.6.0,>=0.4.6 in /usr/local/lib/python3.10/dist-packages (from pyasn1-modules>=0.2.1->google-auth->ivy) (0.5.1)\n",
+            "Requirement already satisfied: parso<0.9.0,>=0.8.3 in /usr/local/lib/python3.10/dist-packages (from jedi>=0.16->ipython>=5.3.0->pyvis->ivy) (0.8.3)\n",
+            "Requirement already satisfied: ptyprocess>=0.5 in /usr/local/lib/python3.10/dist-packages (from pexpect>4.3->ipython>=5.3.0->pyvis->ivy) (0.7.0)\n",
+            "Requirement already satisfied: wcwidth in /usr/local/lib/python3.10/dist-packages (from prompt-toolkit!=3.0.0,!=3.0.1,<3.1.0,>=2.0.0->ipython>=5.3.0->pyvis->ivy) (0.2.12)\n",
+            "Installing collected packages: nvidia-ml-py, urllib3, jedi, einops, dill, colorama, pyvis, ivy\n",
+            "  Attempting uninstall: urllib3\n",
+            "    Found existing installation: urllib3 2.0.7\n",
+            "    Uninstalling urllib3-2.0.7:\n",
+            "      Successfully uninstalled urllib3-2.0.7\n",
+            "Successfully installed colorama-0.4.6 dill-0.3.7 einops-0.7.0 ivy-0.0.4.0 jedi-0.19.1 nvidia-ml-py-12.535.133 pyvis-0.3.2 urllib3-1.26.18\n",
+            "Collecting pytorch\n",
+            "  Downloading pytorch-1.0.2.tar.gz (689 bytes)\n",
+            "  Preparing metadata (setup.py) ... \u001b[?25l\u001b[?25hdone\n",
+            "Building wheels for collected packages: pytorch\n",
+            "  \u001b[1;31merror\u001b[0m: \u001b[1msubprocess-exited-with-error\u001b[0m\n",
+            "  \n",
+            "  \u001b[31m×\u001b[0m \u001b[32mpython setup.py bdist_wheel\u001b[0m did not run successfully.\n",
+            "  \u001b[31m│\u001b[0m exit code: \u001b[1;36m1\u001b[0m\n",
+            "  \u001b[31m╰─>\u001b[0m See above for output.\n",
+            "  \n",
+            "  \u001b[1;35mnote\u001b[0m: This error originates from a subprocess, and is likely not a problem with pip.\n",
+            "  Building wheel for pytorch (setup.py) ... \u001b[?25lerror\n",
+            "\u001b[31m  ERROR: Failed building wheel for pytorch\u001b[0m\u001b[31m\n",
+            "\u001b[0m\u001b[?25h  Running setup.py clean for pytorch\n",
+            "Failed to build pytorch\n",
+            "\u001b[31mERROR: Could not build wheels for pytorch, which is required to install pyproject.toml-based projects\u001b[0m\u001b[31m\n",
+            "\u001b[0mRequirement already satisfied: jax in /usr/local/lib/python3.10/dist-packages (0.4.20)\n",
+            "Requirement already satisfied: ml-dtypes>=0.2.0 in /usr/local/lib/python3.10/dist-packages (from jax) (0.2.0)\n",
+            "Requirement already satisfied: numpy>=1.22 in /usr/local/lib/python3.10/dist-packages (from jax) (1.23.5)\n",
+            "Requirement already satisfied: opt-einsum in /usr/local/lib/python3.10/dist-packages (from jax) (3.3.0)\n",
+            "Requirement already satisfied: scipy>=1.9 in /usr/local/lib/python3.10/dist-packages (from jax) (1.11.4)\n"
+          ]
+        }
+      ],
+      "source": [
+        "!pip install ivy\n",
+        "!pip install pytorch\n",
+        "!pip install jax"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Importing modules"
+      ],
+      "metadata": {
+        "id": "px8FsFqoHhG1"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import torch\n",
+        "import torchvision.models as models\n",
+        "import torchvision.transforms as transforms\n",
+        "import torchvision.datasets as datasets\n",
+        "import torch.nn as nn\n",
+        "from torch.utils.data import DataLoader\n",
+        "\n",
+        "from sklearn import datasets as skdataset\n",
+        "from sklearn.model_selection import train_test_split\n",
+        "\n",
+        "import ivy\n",
+        "import numpy as np\n",
+        "import random\n",
+        "import torch.nn.functional as F"
+      ],
+      "metadata": {
+        "id": "LIr8UV2GD1NH",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "56844bc5-ea70-433a-eec7-4218da5a5d4c"
+      },
+      "execution_count": 2,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stderr",
+          "text": [
+            "/usr/local/lib/python3.10/dist-packages/_distutils_hack/__init__.py:33: UserWarning: Setuptools is replacing distutils.\n",
+            "  warnings.warn(\"Setuptools is replacing distutils.\")\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Loading the MNIST dataset"
+      ],
+      "metadata": {
+        "id": "uAn_jriuHjq0"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "def load_mnist_dataset(num_classes=2):\n",
+        "    # Load the datadet from SkDataset\n",
+        "    X, Y = skdataset.fetch_openml('mnist_784', version=1, return_X_y=True,as_frame=False)\n",
+        "    Y = Y.astype(np.int64)\n",
+        "    # Reduce the number of classes\n",
+        "    idx = Y < num_classes\n",
+        "    X = X[idx]\n",
+        "    Y = Y[idx]\n",
+        "    return X, Y\n",
+        "\n",
+        "RAND_ST = 42\n",
+        "random.seed(RAND_ST)"
+      ],
+      "metadata": {
+        "id": "8NkfQY7VGx7i"
+      },
+      "execution_count": 3,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "X, Y = load_mnist_dataset(num_classes=10)\n",
+        "X = X / 255.0\n",
+        "X_mnist, X_mnist_test, Y_mnist, Y_mnist_test = train_test_split(X, Y, test_size=0.1, random_state=RAND_ST) # 90% training and 10% test"
+      ],
+      "metadata": {
+        "id": "6G50PHPlGsSt"
+      },
+      "execution_count": 4,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# MLP class\n",
+        "class MLP(nn.Module):\n",
+        "  def __init__(self, input_size, hidden_size, output_size):\n",
+        "    super(MLP, self).__init__()\n",
+        "    self.layer1 = nn.Linear(input_size, hidden_size)\n",
+        "    self.layer2 = nn.Linear(hidden_size, hidden_size)\n",
+        "    self.layer3 = nn.Linear(hidden_size, output_size)\n",
+        "\n",
+        "  def forward(self, x, apply_softmax = False):\n",
+        "    x = F.relu(self.layer1(x))\n",
+        "    x = F.relu(self.layer2(x))\n",
+        "    x = self.layer3(x)\n",
+        "    if apply_softmax:\n",
+        "      x = F.softmax(x, dim=1)\n",
+        "    return x"
+      ],
+      "metadata": {
+        "id": "-fCvEiQgD1Y3"
+      },
+      "execution_count": 9,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Training loop"
+      ],
+      "metadata": {
+        "id": "0eE1MdgQJSKb"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))])\n",
+        "\n",
+        "train_dataset = datasets.MNIST(root='./data', train=True, download=True, transform=transform)\n",
+        "train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)\n",
+        "\n",
+        "test_dataset = datasets.MNIST(root='./data', train=False, download=True, transform=transform)\n",
+        "test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False)\n",
+        "\n",
+        "# Initialize the model\n",
+        "model = MLP(784, 128, 10)\n",
+        "\n",
+        "# Loss and optimizer\n",
+        "criterion = nn.CrossEntropyLoss()\n",
+        "optimizer = torch.optim.Adam(model.parameters(), lr=0.001)\n",
+        "\n",
+        "num_epochs = 5\n",
+        "\n",
+        "# Training loop\n",
+        "for epoch in range(num_epochs):\n",
+        "    for i, (images, labels) in enumerate(train_loader):\n",
+        "        # # Flatten the images for the MLP\n",
+        "        images = images.view(images.size(0), -1)\n",
+        "\n",
+        "        # Forward pass\n",
+        "        outputs = model(images)\n",
+        "        loss = criterion(outputs, labels)\n",
+        "\n",
+        "        # Backward pass and optimization\n",
+        "        optimizer.zero_grad()\n",
+        "        loss.backward()\n",
+        "        optimizer.step()\n",
+        "\n",
+        "        # Print loss\n",
+        "        if (i+1) % 100 == 0:\n",
+        "            print(f'Epoch [{epoch+1}/{num_epochs}], Step [{i+1}/{len(train_loader)}], Loss: {loss.item()}')"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "XThlaI_RD1ax",
+        "outputId": "138341ee-5d26-4776-d721-d401ea2d2700"
+      },
+      "execution_count": 12,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Epoch [1/5], Step [100/1875], Loss: 0.807245671749115\n",
+            "Epoch [1/5], Step [200/1875], Loss: 0.4689500331878662\n",
+            "Epoch [1/5], Step [300/1875], Loss: 0.3766792416572571\n",
+            "Epoch [1/5], Step [400/1875], Loss: 0.19227337837219238\n",
+            "Epoch [1/5], Step [500/1875], Loss: 0.4333420693874359\n",
+            "Epoch [1/5], Step [600/1875], Loss: 0.5336127877235413\n",
+            "Epoch [1/5], Step [700/1875], Loss: 0.2899523079395294\n",
+            "Epoch [1/5], Step [800/1875], Loss: 0.1524447798728943\n",
+            "Epoch [1/5], Step [900/1875], Loss: 0.11209344118833542\n",
+            "Epoch [1/5], Step [1000/1875], Loss: 0.29751965403556824\n",
+            "Epoch [1/5], Step [1100/1875], Loss: 0.13691729307174683\n",
+            "Epoch [1/5], Step [1200/1875], Loss: 0.24625271558761597\n",
+            "Epoch [1/5], Step [1300/1875], Loss: 0.16565637290477753\n",
+            "Epoch [1/5], Step [1400/1875], Loss: 0.06687368452548981\n",
+            "Epoch [1/5], Step [1500/1875], Loss: 0.471828430891037\n",
+            "Epoch [1/5], Step [1600/1875], Loss: 0.30797281861305237\n",
+            "Epoch [1/5], Step [1700/1875], Loss: 0.30266839265823364\n",
+            "Epoch [1/5], Step [1800/1875], Loss: 0.284690260887146\n",
+            "Epoch [2/5], Step [100/1875], Loss: 0.5057774782180786\n",
+            "Epoch [2/5], Step [200/1875], Loss: 0.2679400146007538\n",
+            "Epoch [2/5], Step [300/1875], Loss: 0.10875590145587921\n",
+            "Epoch [2/5], Step [400/1875], Loss: 0.11386749148368835\n",
+            "Epoch [2/5], Step [500/1875], Loss: 0.4018855094909668\n",
+            "Epoch [2/5], Step [600/1875], Loss: 0.45632776618003845\n",
+            "Epoch [2/5], Step [700/1875], Loss: 0.16816875338554382\n",
+            "Epoch [2/5], Step [800/1875], Loss: 0.13460591435432434\n",
+            "Epoch [2/5], Step [900/1875], Loss: 0.0872606709599495\n",
+            "Epoch [2/5], Step [1000/1875], Loss: 0.127412348985672\n",
+            "Epoch [2/5], Step [1100/1875], Loss: 0.34117674827575684\n",
+            "Epoch [2/5], Step [1200/1875], Loss: 0.19076095521450043\n",
+            "Epoch [2/5], Step [1300/1875], Loss: 0.16948705911636353\n",
+            "Epoch [2/5], Step [1400/1875], Loss: 0.1586778163909912\n",
+            "Epoch [2/5], Step [1500/1875], Loss: 0.09831172972917557\n",
+            "Epoch [2/5], Step [1600/1875], Loss: 0.05153900757431984\n",
+            "Epoch [2/5], Step [1700/1875], Loss: 0.31346195936203003\n",
+            "Epoch [2/5], Step [1800/1875], Loss: 0.27939438819885254\n",
+            "Epoch [3/5], Step [100/1875], Loss: 0.2383362352848053\n",
+            "Epoch [3/5], Step [200/1875], Loss: 0.03466929867863655\n",
+            "Epoch [3/5], Step [300/1875], Loss: 0.0655328556895256\n",
+            "Epoch [3/5], Step [400/1875], Loss: 0.2784166932106018\n",
+            "Epoch [3/5], Step [500/1875], Loss: 0.03915978968143463\n",
+            "Epoch [3/5], Step [600/1875], Loss: 0.04259359464049339\n",
+            "Epoch [3/5], Step [700/1875], Loss: 0.08857505768537521\n",
+            "Epoch [3/5], Step [800/1875], Loss: 0.04137064889073372\n",
+            "Epoch [3/5], Step [900/1875], Loss: 0.1347617208957672\n",
+            "Epoch [3/5], Step [1000/1875], Loss: 0.09823422878980637\n",
+            "Epoch [3/5], Step [1100/1875], Loss: 0.010604389943182468\n",
+            "Epoch [3/5], Step [1200/1875], Loss: 0.035042282193899155\n",
+            "Epoch [3/5], Step [1300/1875], Loss: 0.06153654307126999\n",
+            "Epoch [3/5], Step [1400/1875], Loss: 0.09281094372272491\n",
+            "Epoch [3/5], Step [1500/1875], Loss: 0.15401092171669006\n",
+            "Epoch [3/5], Step [1600/1875], Loss: 0.022287944331765175\n",
+            "Epoch [3/5], Step [1700/1875], Loss: 0.13071727752685547\n",
+            "Epoch [3/5], Step [1800/1875], Loss: 0.009426405653357506\n",
+            "Epoch [4/5], Step [100/1875], Loss: 0.11616840958595276\n",
+            "Epoch [4/5], Step [200/1875], Loss: 0.006226320751011372\n",
+            "Epoch [4/5], Step [300/1875], Loss: 0.07386387884616852\n",
+            "Epoch [4/5], Step [400/1875], Loss: 0.07759826630353928\n",
+            "Epoch [4/5], Step [500/1875], Loss: 0.037180811166763306\n",
+            "Epoch [4/5], Step [600/1875], Loss: 0.06555413454771042\n",
+            "Epoch [4/5], Step [700/1875], Loss: 0.06860153377056122\n",
+            "Epoch [4/5], Step [800/1875], Loss: 0.08455342054367065\n",
+            "Epoch [4/5], Step [900/1875], Loss: 0.02097773179411888\n",
+            "Epoch [4/5], Step [1000/1875], Loss: 0.20224879682064056\n",
+            "Epoch [4/5], Step [1100/1875], Loss: 0.6975708603858948\n",
+            "Epoch [4/5], Step [1200/1875], Loss: 0.06671793758869171\n",
+            "Epoch [4/5], Step [1300/1875], Loss: 0.09946539998054504\n",
+            "Epoch [4/5], Step [1400/1875], Loss: 0.0852634534239769\n",
+            "Epoch [4/5], Step [1500/1875], Loss: 0.04223885014653206\n",
+            "Epoch [4/5], Step [1600/1875], Loss: 0.17026498913764954\n",
+            "Epoch [4/5], Step [1700/1875], Loss: 0.20370230078697205\n",
+            "Epoch [4/5], Step [1800/1875], Loss: 0.03625153750181198\n",
+            "Epoch [5/5], Step [100/1875], Loss: 0.0026351059786975384\n",
+            "Epoch [5/5], Step [200/1875], Loss: 0.014503800310194492\n",
+            "Epoch [5/5], Step [300/1875], Loss: 0.016357067972421646\n",
+            "Epoch [5/5], Step [400/1875], Loss: 0.04046155512332916\n",
+            "Epoch [5/5], Step [500/1875], Loss: 0.05110843479633331\n",
+            "Epoch [5/5], Step [600/1875], Loss: 0.0029595275409519672\n",
+            "Epoch [5/5], Step [700/1875], Loss: 0.015587488189339638\n",
+            "Epoch [5/5], Step [800/1875], Loss: 0.08796299993991852\n",
+            "Epoch [5/5], Step [900/1875], Loss: 0.08781851828098297\n",
+            "Epoch [5/5], Step [1000/1875], Loss: 0.051126524806022644\n",
+            "Epoch [5/5], Step [1100/1875], Loss: 0.06707809120416641\n",
+            "Epoch [5/5], Step [1200/1875], Loss: 0.09486423432826996\n",
+            "Epoch [5/5], Step [1300/1875], Loss: 0.04718597233295441\n",
+            "Epoch [5/5], Step [1400/1875], Loss: 0.16389290988445282\n",
+            "Epoch [5/5], Step [1500/1875], Loss: 0.12900690734386444\n",
+            "Epoch [5/5], Step [1600/1875], Loss: 0.03457696735858917\n",
+            "Epoch [5/5], Step [1700/1875], Loss: 0.03210717439651489\n",
+            "Epoch [5/5], Step [1800/1875], Loss: 0.01759430393576622\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Test the model\n",
+        "model.eval()  # Set the model to evaluation mode\n",
+        "with torch.no_grad():\n",
+        "    correct = 0\n",
+        "    total = 0\n",
+        "    for images, labels in test_loader:\n",
+        "        images = images.view(images.size(0), -1)\n",
+        "        outputs = model(images)\n",
+        "        _, predicted = torch.max(outputs.data, 1)\n",
+        "        total += labels.size(0)\n",
+        "        correct += (predicted == labels).sum()\n",
+        "\n",
+        "    print(f'Accuracy of the model on the 10000 test images: {100 * correct / total}%')"
+      ],
+      "metadata": {
+        "id": "DtjiH20-Jv0G",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "a07da6b7-272e-4f0a-c4a9-10966b092d0b"
+      },
+      "execution_count": 13,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Accuracy of the model on the 10000 test images: 96.91000366210938%\n"
+          ]
+        }
+      ]
+    }
+  ]
+}
